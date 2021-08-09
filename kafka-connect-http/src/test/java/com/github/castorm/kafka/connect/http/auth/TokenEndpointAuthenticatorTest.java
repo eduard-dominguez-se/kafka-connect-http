@@ -62,6 +62,7 @@ class TokenEndpointAuthenticatorTest {
         given(config.getTokenKeyPath()).willReturn("accessToken");
         given(config.getAuthBody())
                 .willReturn(new Password("{  \"login\": \"myUser\",  \"password\": \"myPassword\"}"));
+        given(config.getAuthBodyMediaType()).willReturn("application/json; charset=utf-8");
 
         authenticator.configure(emptyMap());
 
@@ -74,6 +75,7 @@ class TokenEndpointAuthenticatorTest {
 
         given(config.getAuthUrl()).willReturn("http://google.com/");
         given(config.getAuthBody()).willReturn(new Password(""));
+        given(config.getAuthBodyMediaType()).willReturn("application/json; charset=utf-8");
 
         authenticator.configure(emptyMap());
 
@@ -87,10 +89,27 @@ class TokenEndpointAuthenticatorTest {
         given(config.getAuthUrl()).willReturn("this makes no sense");
         given(config.getAuthBody())
                 .willReturn(new Password("{  \"login\": \"myUser\",  \"password\": \"myPassword\"}"));
+        given(config.getAuthBodyMediaType()).willReturn("application/json; charset=utf-8");
 
         authenticator.configure(emptyMap());
 
         assertThatThrownBy(() -> authenticator.getAuthorizationHeader()).isInstanceOf(ConnectException.class);
 
+    }
+
+    @Test
+    void whenCredentialsPostParameters_thenAccessToken() {
+
+        webServer.enqueue(response);
+
+        given(config.getAuthUrl()).willReturn(webServer.url("/Auth").toString());
+        given(config.getTokenKeyPath()).willReturn("accessToken");
+        given(config.getAuthBody())
+                .willReturn(new Password("login=myUser&password=myPassword"));
+        given(config.getAuthBodyMediaType()).willReturn("application/x-www-form-urlencoded");
+        authenticator.configure(emptyMap());
+
+        assertThat(authenticator.getAuthorizationHeader().toString())
+                .contains("Bearer someRandomJwtTokenHeader.");
     }
 }

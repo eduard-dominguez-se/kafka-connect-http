@@ -60,7 +60,7 @@ public class TokenEndpointAuthenticator implements HttpAuthenticator {
     public Optional<String> getAuthorizationHeader() {
         String credentialsBody = config.getAuthBody().value();
         RequestBody requestBody = RequestBody.create(credentialsBody,
-                MediaType.parse("application/json; charset=utf-8"));
+                MediaType.parse(config.getAuthBodyMediaType()));
         String response = execute(requestBody);
 
         ObjectMapper objectMapper = new ObjectMapper();

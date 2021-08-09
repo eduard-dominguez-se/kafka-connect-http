@@ -34,22 +34,26 @@ import static org.apache.kafka.common.config.ConfigDef.Type.STRING;
 public class TokenEndpointAuthenticatorConfig extends AbstractConfig {
     private static final String AUTH_URL = "http.auth.url";
     private static final String AUTH_BODY = "http.auth.body";
+    private static final String AUTH_BODY_MEDIATYPE = "http.auth.body.mediatype";
     private static final String TOKEN_KEY_PATH = "http.auth.tokenkeypath";
 
     private final String authUrl;
     private final Password authBody;
+    private final String authBodyMediaType;
     private final String tokenKeyPath;
 
     public TokenEndpointAuthenticatorConfig(Map<?, ?> originals) {
         super(config(), originals);
         authUrl = getString(AUTH_URL);
         authBody = getPassword(AUTH_BODY);
+        authBodyMediaType = getString(AUTH_BODY_MEDIATYPE);
         tokenKeyPath = getString(TOKEN_KEY_PATH);
 
     }
 
     public static ConfigDef config() {
-        return new ConfigDef().define(AUTH_BODY, ConfigDef.Type.PASSWORD, "", HIGH, "Auth payload JSON")
+        return new ConfigDef().define(AUTH_BODY, ConfigDef.Type.PASSWORD, "", HIGH, "Auth payload")
+                .define(AUTH_BODY_MEDIATYPE, STRING, "application/json; charset=utf-8", HIGH, "Auth payload MediaType" )
                 .define(TOKEN_KEY_PATH, STRING, "access_token", HIGH, "Auth request response token key")
                 .define(AUTH_URL, STRING, "", HIGH, "Auth endpoint");
     }
