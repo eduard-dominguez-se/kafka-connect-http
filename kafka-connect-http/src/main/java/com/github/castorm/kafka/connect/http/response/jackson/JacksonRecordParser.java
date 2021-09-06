@@ -80,7 +80,7 @@ public class JacksonRecordParser implements Configurable {
      * @deprecated Replaced by Offset
      */
     @Deprecated
-    Optional<String> getTimestamp(JsonNode node) {
+    Optional<String>    getTimestamp(JsonNode node) {
         return timestampPointer.map(pointer -> serializer.getObjectAt(node, pointer).asText());
     }
 
