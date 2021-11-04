@@ -21,6 +21,7 @@ package com.github.castorm.kafka.connect.http.auth;
  */
 
 import com.github.castorm.kafka.connect.http.auth.spi.HttpAuthenticator;
+import okhttp3.Response;
 
 import java.util.Map;
 import java.util.Optional;
@@ -49,7 +50,7 @@ public class ConfigurableHttpAuthenticator implements HttpAuthenticator {
     }
 
     @Override
-    public Optional<String> getAuthorizationHeader() {
-        return delegate.getAuthorizationHeader();
+    public Optional<String> getAuthorizationHeader(Response response) {
+        return delegate.getAuthorizationHeader(response);
     }
 }

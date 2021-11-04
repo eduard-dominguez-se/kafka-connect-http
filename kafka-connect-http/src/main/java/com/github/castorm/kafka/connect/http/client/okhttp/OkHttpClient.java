@@ -67,13 +67,13 @@ public class OkHttpClient implements HttpClient {
                 .readTimeout(config.getReadTimeoutMillis(), MILLISECONDS)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(createLoggingInterceptor())
-                .addInterceptor(chain -> chain.proceed(authorize(chain.request())))
-                .authenticator((route, response) -> authorize(response.request()))
+                .addInterceptor(chain -> chain.proceed(authorize(chain.request(), null)))
+                .authenticator((route, response) ->authorize(response.request(), response))
                 .build();
     }
 
-    private Request authorize(Request request) {
-        return authenticator.getAuthorizationHeader()
+    private Request authorize(Request request, Response response) {
+        return authenticator.getAuthorizationHeader(response)
                 .map(header -> request.newBuilder().header(AUTHORIZATION, header).build())
                 .orElse(request);
     }

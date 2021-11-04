@@ -53,10 +53,10 @@ class ConfigurableHttpAuthenticatorTest {
     void whenHeader_thenDelegated() {
 
         given(config.getAuthenticator()).willReturn(delegate);
-        given(delegate.getAuthorizationHeader()).willReturn(Optional.of("header"));
+        given(delegate.getAuthorizationHeader(null)).willReturn(Optional.of("header"));
 
         authenticator.configure(emptyMap());
 
-        assertThat(authenticator.getAuthorizationHeader()).contains("header");
+        assertThat(authenticator.getAuthorizationHeader(null)).contains("header");
     }
 }

@@ -21,13 +21,14 @@ package com.github.castorm.kafka.connect.http.auth;
  */
 
 import com.github.castorm.kafka.connect.http.auth.spi.HttpAuthenticator;
+import okhttp3.Response;
 
 import java.util.Optional;
 
 public class NoneHttpAuthenticator implements HttpAuthenticator {
 
     @Override
-    public Optional<String> getAuthorizationHeader() {
+    public Optional<String> getAuthorizationHeader(Response response) {
         return Optional.empty();
     }
 }

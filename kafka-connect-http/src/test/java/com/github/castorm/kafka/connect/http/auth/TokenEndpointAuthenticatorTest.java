@@ -66,7 +66,7 @@ class TokenEndpointAuthenticatorTest {
 
         authenticator.configure(emptyMap());
 
-        assertThat(authenticator.getAuthorizationHeader().toString())
+        assertThat(authenticator.getAuthorizationHeader(null).toString())
                 .contains("Bearer someRandomJwtTokenHeader.");
     }
 
@@ -79,7 +79,7 @@ class TokenEndpointAuthenticatorTest {
 
         authenticator.configure(emptyMap());
 
-        assertThatThrownBy(() -> authenticator.getAuthorizationHeader()).isInstanceOf(ConnectException.class);
+        assertThatThrownBy(() -> authenticator.getAuthorizationHeader(null)).isInstanceOf(ConnectException.class);
 
     }
 
@@ -93,7 +93,7 @@ class TokenEndpointAuthenticatorTest {
 
         authenticator.configure(emptyMap());
 
-        assertThatThrownBy(() -> authenticator.getAuthorizationHeader()).isInstanceOf(ConnectException.class);
+        assertThatThrownBy(() -> authenticator.getAuthorizationHeader(null)).isInstanceOf(ConnectException.class);
 
     }
 
@@ -109,7 +109,7 @@ class TokenEndpointAuthenticatorTest {
         given(config.getAuthBodyMediaType()).willReturn("application/x-www-form-urlencoded");
         authenticator.configure(emptyMap());
 
-        assertThat(authenticator.getAuthorizationHeader().toString())
+        assertThat(authenticator.getAuthorizationHeader(null).toString())
                 .contains("Bearer someRandomJwtTokenHeader.");
     }
 }

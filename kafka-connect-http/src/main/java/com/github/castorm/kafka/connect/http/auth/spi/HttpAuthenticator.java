@@ -20,6 +20,7 @@ package com.github.castorm.kafka.connect.http.auth.spi;
  * #L%
  */
 
+import okhttp3.Response;
 import org.apache.kafka.common.Configurable;
 
 import java.util.Map;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @FunctionalInterface
 public interface HttpAuthenticator extends Configurable {
 
-    Optional<String> getAuthorizationHeader();
+    Optional<String> getAuthorizationHeader(Response response);
 
     default void configure(Map<String, ?> map) {
         // Do nothing

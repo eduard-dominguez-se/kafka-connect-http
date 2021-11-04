@@ -43,6 +43,8 @@ public class TokenEndpointAuthenticator implements HttpAuthenticator {
     private final Function<Map<String, ?>, TokenEndpointAuthenticatorConfig> configFactory;
     private TokenEndpointAuthenticatorConfig config;
 
+    private String accessToken = null;
+
     public TokenEndpointAuthenticator() {
         this(TokenEndpointAuthenticatorConfig::new);
     }
@@ -57,23 +59,24 @@ public class TokenEndpointAuthenticator implements HttpAuthenticator {
     }
 
     @Override
-    public Optional<String> getAuthorizationHeader() {
-        String credentialsBody = config.getAuthBody().value();
-        RequestBody requestBody = RequestBody.create(credentialsBody,
-                MediaType.parse(config.getAuthBodyMediaType()));
-        String response = execute(requestBody);
+    public Optional<String> getAuthorizationHeader(Response response) {
+        if (accessToken == null || (response != null && response.code() == 401)) {
+            String credentialsBody = config.getAuthBody().value();
+            RequestBody requestBody = RequestBody.create(credentialsBody,
+                    MediaType.parse(config.getAuthBodyMediaType()));
+            String newResponse = execute(requestBody);
 
-        ObjectMapper objectMapper = new ObjectMapper();
+            ObjectMapper objectMapper = new ObjectMapper();
 
-        String accessToken;
-        try {
-            accessToken = objectMapper.readTree(response).path(config.getTokenKeyPath()).asText();
-        } catch (JsonProcessingException e) {
-            throw new RetriableException("Error: " + e.getMessage(), e);
-        }
+            try {
+                accessToken = objectMapper.readTree(newResponse).path(config.getTokenKeyPath()).asText();
+            } catch (JsonProcessingException e) {
+                throw new RetriableException("Error: " + e.getMessage(), e);
+            }
 
-        if (accessToken.isBlank()) {
-            throw new RetriableException("Error: No access token found at " + config.getTokenKeyPath());
+            if (accessToken.isBlank()) {
+                throw new RetriableException("Error: No access token found at " + config.getTokenKeyPath());
+            }
         }
 
         return Optional.of("Bearer " + accessToken);

@@ -52,7 +52,7 @@ class BasicHttpAuthenticatorTest {
 
         authenticator.configure(emptyMap());
 
-        assertThat(authenticator.getAuthorizationHeader()).contains("Basic dXNlcjpwYXNzd29yZA==");
+        assertThat(authenticator.getAuthorizationHeader(null)).contains("Basic dXNlcjpwYXNzd29yZA==");
     }
 
     @Test
@@ -63,6 +63,6 @@ class BasicHttpAuthenticatorTest {
 
         authenticator.configure(emptyMap());
 
-        assertThat(authenticator.getAuthorizationHeader()).isEmpty();
+        assertThat(authenticator.getAuthorizationHeader(null)).isEmpty();
     }
 }

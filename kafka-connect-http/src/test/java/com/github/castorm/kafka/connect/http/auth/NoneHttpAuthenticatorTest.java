@@ -28,6 +28,6 @@ class NoneHttpAuthenticatorTest {
 
     @Test
     void whenGetHeader_thenEmpty() {
-        assertThat(new NoneHttpAuthenticator().getAuthorizationHeader()).isEmpty();
+        assertThat(new NoneHttpAuthenticator().getAuthorizationHeader(null)).isEmpty();
     }
 }

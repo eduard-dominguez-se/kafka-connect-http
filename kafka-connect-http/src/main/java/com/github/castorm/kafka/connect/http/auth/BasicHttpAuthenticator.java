@@ -22,6 +22,7 @@ package com.github.castorm.kafka.connect.http.auth;
 
 import com.github.castorm.kafka.connect.http.auth.spi.HttpAuthenticator;
 import okhttp3.Credentials;
+import okhttp3.Response;
 
 import java.util.Map;
 import java.util.Optional;
@@ -56,7 +57,7 @@ public class BasicHttpAuthenticator implements HttpAuthenticator {
     }
 
     @Override
-    public Optional<String> getAuthorizationHeader() {
+    public Optional<String> getAuthorizationHeader(Response response) {
         return header;
     }
 }
